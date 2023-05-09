@@ -21,8 +21,8 @@ public class UserDaoJDBCImpl implements UserDao {
                     " lastName VARCHAR (50), " +
                     " age SMALLINT not NULL, " +
                     " PRIMARY KEY (id))";
-            PreparedStatement preparedStatement = connection.prepareStatement(SQL);
-            preparedStatement.executeUpdate();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(SQL);
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
@@ -30,8 +30,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         try (Connection connection = connectionUtil.getConnection()){
-            PreparedStatement preparedStatement = connection.prepareStatement("DROP TABLE IF EXISTS users");
-            preparedStatement.executeUpdate();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("DROP TABLE IF EXISTS users");
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
@@ -65,8 +65,8 @@ public class UserDaoJDBCImpl implements UserDao {
         List<User> users = new ArrayList<>();
 
         try (Connection connection = connectionUtil.getConnection()){
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM users");
-            ResultSet resultSet = preparedStatement.executeQuery();
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
 
             while (resultSet.next()) {
                 User user = new User();
@@ -84,8 +84,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
         try (Connection connection = connectionUtil.getConnection()){
-            PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM users");
-            preparedStatement.executeUpdate();
+            Statement statement = connection.createStatement();
+            statement.executeUpdate("DELETE FROM users");
         } catch (IOException | SQLException e) {
             throw new RuntimeException(e);
         }
