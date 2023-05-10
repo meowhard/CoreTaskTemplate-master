@@ -4,6 +4,7 @@ import jm.task.core.jdbc.model.User;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.cfg.Environment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +17,6 @@ import java.util.Properties;
 
 public class Util {
     // реализуйте настройку соеденения с БД
-    private static SessionFactory sessionFactory;
     private final String DATABASE_PROPERTIES = "C:\\Projects\\Java\\CoreTaskTemplate-master" +
             "\\src\\main\\java\\jm\\task\\core\\jdbc\\util\\database.properties";
 
@@ -33,17 +33,14 @@ public class Util {
     }
 
     public static SessionFactory getSessionFactory() {
-        if (sessionFactory == null) {
-            try {
-                Configuration configuration = new Configuration().configure();
-                configuration.addAnnotatedClass(User.class);
-                StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-                        .applySettings(configuration.getProperties());
-                sessionFactory = configuration.buildSessionFactory(builder.build());
-            } catch (Exception e) {
-                System.out.println("Exception: " + e);
-            }
-        }
-        return sessionFactory;
+        Properties properties = new Properties();
+        properties.put(Environment.DRIVER, "org.postgresql.Driver");
+        properties.put(Environment.URL, "jdbc:postgresql://localhost:5432/preproject111");
+        properties.put(Environment.USER, "postgres");
+        properties.put(Environment.PASS, "pass");
+        properties.put(Environment.SHOW_SQL, "true");
+        properties.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
+        properties.put(Environment.HBM2DDL_AUTO, "update");
+        return new Configuration().setProperties(properties).buildSessionFactory();
     }
 }
