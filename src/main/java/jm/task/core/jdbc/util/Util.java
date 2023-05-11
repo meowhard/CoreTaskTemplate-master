@@ -38,9 +38,14 @@ public class Util {
         properties.put(Environment.URL, "jdbc:postgresql://localhost:5432/preproject111");
         properties.put(Environment.USER, "postgres");
         properties.put(Environment.PASS, "pass");
-        properties.put(Environment.SHOW_SQL, "true");
+        properties.put(Environment.SHOW_SQL, "false");
         properties.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
         properties.put(Environment.HBM2DDL_AUTO, "update");
-        return new Configuration().setProperties(properties).buildSessionFactory();
+
+        Configuration configuration = new Configuration().setProperties(properties);
+        configuration.addAnnotatedClass(User.class);
+        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
+                .applySettings(configuration.getProperties());
+        return configuration.buildSessionFactory(builder.build());
     }
 }
